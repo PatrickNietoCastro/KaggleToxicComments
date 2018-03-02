@@ -1,5 +1,6 @@
 # train/test data
 Data/
+SpacyAPI/Textcats/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
