@@ -1,6 +1,8 @@
 # train/test data
 Data/
 SpacyAPI/Textcats/
+SpacyAPI/Plots/
+Submissions/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
