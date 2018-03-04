@@ -89,6 +89,9 @@ def split_data(data_full=None, split=0.9, n_texts=None):
 
 
 if __name__ == "__main__":
+    """
+    Main function of text_categorizer
+    """
 
     save_my_model       = 0
     plot_eval           = 1

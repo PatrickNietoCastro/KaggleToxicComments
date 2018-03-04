@@ -2,17 +2,12 @@ from time import strftime, gmtime
 
 import pandas as pd
 import os
-import numpy as np
 
 import en_core_web_sm
-from spacy.gold import GoldParse
-from spacy.util import minibatch, compounding, decaying
 from spacy.pipeline import TextCategorizer
-import matplotlib.pyplot as plt
 
 
-
-def load_data(filepath=None, limit=None, cats_start_idx=2, cats_end_idx=8, nlp=None):
+def load_data(filepath=None, limit=None):
     """Load data from filepath."""
     data_pd = pd.read_csv(filepath_or_buffer=filepath)[:limit]
     return data_pd
@@ -45,14 +40,14 @@ def create_textcat(nlp_model=None, model_dir=None, textcat_filename=None, custom
 if __name__ == "__main__":
 
     current_time        = strftime("%Y%m%d-%H%M%S", gmtime())
-    print('Current time: ', current_time)
+    print('Current time start: ', current_time)
     # Configuration values
     data_filepath       = os.path.join('/home', 'castro', 'PycharmProjects', 'KaggleToxicComments', 'Data', 'test.csv')
     plot_dir            = os.path.join('/home', 'castro', 'PycharmProjects', 'KaggleToxicComments', 'SpacyAPI', 'Plots')
     model_dir           = os.path.join('/home','castro','PycharmProjects','KaggleToxicComments','SpacyAPI','Textcats')
     model_load_name     = 'spacy_categorizer20180301-223202'
 
-    n_texts             = None
+    n_texts             = 30
     custom_labels       = ["toxic","severe_toxic","obscene","threat","insult","identity_hate"]
 
     # Start
@@ -77,21 +72,22 @@ if __name__ == "__main__":
     for label in custom_labels:
         print(str(label))
         data_full.loc[:, label] = data_full.loc[:, 'prediction'].apply(lambda x: dict(x)[label])
-    submission = data_full.loc[:, ['id', 'toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']]
     print('save submission to', str(os.path.join('/home',
                                                  'castro',
                                                  'PycharmProjects',
                                                  'KaggleToxicComments',
                                                  'Submissions',
                                                  'submission+'+current_time+'.csv')))
-    submission.to_csv(path_or_buf=os.path.join('/home',
-                                               'castro',
-                                               'PycharmProjects',
-                                               'KaggleToxicComments',
-                                               'Submissions',
-                                               'submission+'+current_time+'.csv'),
-                      index=False)
+    data_full.drop(columns=['comment_text',
+                            'comment_doc',
+                            'prediction']).to_csv(path_or_buf=os.path.join('/home',
+                                                                           'castro',
+                                                                           'PycharmProjects',
+                                                                           'KaggleToxicComments',
+                                                                           'Submissions',
+                                                                           'submission+'+current_time+'.csv'),
+                                                  index=False)
 
     current_time        = strftime("%Y%m%d-%H%M%S", gmtime())
-    print('Current time: ', current_time)
+    print('Current time end: ', current_time)
     print('spacy predictions are fun!')
